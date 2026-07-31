@@ -1,0 +1,134 @@
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Not Found: /
+Not Found: /
+"GET / HTTP/1.1" 404 2217
+"GET / HTTP/1.1" 404 2217
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Bad Request: /api/auth/register/
+Bad Request: /api/auth/register/
+"POST /api/auth/register/ HTTP/1.1" 400 50
+"POST /api/auth/register/ HTTP/1.1" 400 50
+"POST /api/auth/register/ HTTP/1.1" 200 612
+"POST /api/auth/register/ HTTP/1.1" 200 612
+"POST /api/auth/login/ HTTP/1.1" 200 612
+"POST /api/auth/login/ HTTP/1.1" 200 612
+"POST /api/auth/register/ HTTP/1.1" 200 610
+"POST /api/auth/register/ HTTP/1.1" 200 610
+"POST /api/auth/login/ HTTP/1.1" 200 610
+"POST /api/auth/login/ HTTP/1.1" 200 610
+Unauthorized: /api/users/me/
+Unauthorized: /api/users/me/
+"GET /api/users/me/ HTTP/1.1" 401 86
+"GET /api/users/me/ HTTP/1.1" 401 86
+Unauthorized: /api/users/me/
+Unauthorized: /api/users/me/
+"GET /api/users/me/ HTTP/1.1" 401 86
+"GET /api/users/me/ HTTP/1.1" 401 86
+"GET /api/users/me/ HTTP/1.1" 200 119
+"GET /api/users/me/ HTTP/1.1" 200 119
+"POST /api/auth/register/ HTTP/1.1" 200 612
+"POST /api/auth/register/ HTTP/1.1" 200 612
+"POST /api/auth/login/ HTTP/1.1" 200 612
+"POST /api/auth/login/ HTTP/1.1" 200 612
+Unauthorized: /api/users/me/
+Unauthorized: /api/users/me/
+"GET /api/users/me/ HTTP/1.1" 401 135
+"GET /api/users/me/ HTTP/1.1" 401 135
+Unauthorized: /api/workspaces/
+Unauthorized: /api/workspaces/
+"POST /api/workspaces/ HTTP/1.1" 401 135
+"POST /api/workspaces/ HTTP/1.1" 401 135
+Unauthorized: /api/boards/
+Unauthorized: /api/boards/
+"POST /api/boards/ HTTP/1.1" 401 135
+"POST /api/boards/ HTTP/1.1" 401 135
+Unauthorized: /api/columns/
+Unauthorized: /api/columns/
+"GET /api/columns/?board= HTTP/1.1" 401 135
+"GET /api/columns/?board= HTTP/1.1" 401 135
+Unauthorized: /api/tasks/
+Unauthorized: /api/tasks/
+"POST /api/tasks/ HTTP/1.1" 401 135
+"POST /api/tasks/ HTTP/1.1" 401 135
+Unauthorized: /api/comments/
+Unauthorized: /api/comments/
+"POST /api/comments/ HTTP/1.1" 401 135
+"POST /api/comments/ HTTP/1.1" 401 135
+Not Found: /api/tasks//move/
+Not Found: /api/tasks//move/
+"POST /api/tasks//move/ HTTP/1.1" 404 20990
+"POST /api/tasks//move/ HTTP/1.1" 404 20990
+Not Found: /api/tasks//complete/
+Not Found: /api/tasks//complete/
+"POST /api/tasks//complete/ HTTP/1.1" 404 21002
+"POST /api/tasks//complete/ HTTP/1.1" 404 21002
+Unauthorized: /api/dashboard/stats/
+Unauthorized: /api/dashboard/stats/
+"GET /api/dashboard/stats/ HTTP/1.1" 401 135
+"GET /api/dashboard/stats/ HTTP/1.1" 401 135
+Unauthorized: /api/activities/
+Unauthorized: /api/activities/
+"GET /api/activities/ HTTP/1.1" 401 135
+"GET /api/activities/ HTTP/1.1" 401 135
+Not Found: /api/tasks//
+Not Found: /api/tasks//
+"GET /api/tasks// HTTP/1.1" 404 20974
+"GET /api/tasks// HTTP/1.1" 404 20974
+Bad Request: /api/auth/register/
+Bad Request: /api/auth/register/
+"POST /api/auth/register/ HTTP/1.1" 400 105
+"POST /api/auth/register/ HTTP/1.1" 400 105
+"POST /api/auth/login/ HTTP/1.1" 200 612
+"POST /api/auth/login/ HTTP/1.1" 200 612
+"GET /api/users/me/ HTTP/1.1" 200 121
+"GET /api/users/me/ HTTP/1.1" 200 121
+"POST /api/workspaces/ HTTP/1.1" 201 404
+"POST /api/workspaces/ HTTP/1.1" 201 404
+"POST /api/boards/ HTTP/1.1" 201 198
+"POST /api/boards/ HTTP/1.1" 201 198
+"GET /api/columns/?board=1 HTTP/1.1" 200 503
+"GET /api/columns/?board=1 HTTP/1.1" 200 503
+"POST /api/tasks/ HTTP/1.1" 201 389
+"POST /api/tasks/ HTTP/1.1" 201 389
+"POST /api/comments/ HTTP/1.1" 201 299
+"POST /api/comments/ HTTP/1.1" 201 299
+"POST /api/tasks/1/move/ HTTP/1.1" 200 389
+"POST /api/tasks/1/move/ HTTP/1.1" 200 389
+"POST /api/tasks/1/complete/ HTTP/1.1" 200 413
+"POST /api/tasks/1/complete/ HTTP/1.1" 200 413
+"GET /api/dashboard/stats/ HTTP/1.1" 200 188
+"GET /api/dashboard/stats/ HTTP/1.1" 200 188
+"GET /api/activities/ HTTP/1.1" 200 1357
+"GET /api/activities/ HTTP/1.1" 200 1357
+"GET /api/tasks/1/ HTTP/1.1" 200 413
+"GET /api/tasks/1/ HTTP/1.1" 200 413
+"GET /admin/ HTTP/1.1" 302 0
+"GET /admin/ HTTP/1.1" 302 0
+"GET /admin/login/?next=/admin/ HTTP/1.1" 200 4178
+"GET /admin/login/?next=/admin/ HTTP/1.1" 200 4178
+"GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2694
+"GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2929
+"GET /static/admin/css/login.css HTTP/1.1" 200 958
+"GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2694
+"GET /static/admin/css/responsive.css HTTP/1.1" 200 18557
+"GET /static/admin/css/base.css HTTP/1.1" 200 21207
+"GET /static/admin/css/base.css HTTP/1.1" 200 21207
+"GET /static/admin/css/login.css HTTP/1.1" 200 958
+"GET /static/admin/css/responsive.css HTTP/1.1" 200 18557
+"GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2929
+"GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+"GET /static/admin/js/theme.js HTTP/1.1" 200 1943
+"GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+"GET /static/admin/js/theme.js HTTP/1.1" 200 1943
+"POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+"POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+"GET /admin/ HTTP/1.1" 200 8380
+"GET /admin/ HTTP/1.1" 200 8380
+"GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+"GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+"GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+"GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+"GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+"GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
