@@ -101,10 +101,3 @@ gunicorn kanbanproject.wsgi:application --bind 0.0.0.0:8000 --workers 3
   ```bash
   python manage.py migrate
   ```
-
-## Notes
-
-- `venv/` is ignored by `.gitignore`.
-- Static files are served with WhiteNoise.
-- On Render, make sure `DEBUG=False` for production.
-# Refresh contributors
