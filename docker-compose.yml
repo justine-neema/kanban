@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: gunicorn kanbanproject.wsgi:application --bind 0.0.0.0:8000 --workers 3
+    ports:
+      - "8000:8000"
+    environment:
+      DEBUG: 'True'
+      SECRET_KEY: 'changeme'
+      DATABASE_URL: 'postgres://kanban_user:Neema@123@db:5432/kanban'
+      ALLOWED_HOSTS: 'localhost,127.0.0.1'
+    depends_on:
+      - db
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: kanban
+      POSTGRES_USER: kanban_user
+      POSTGRES_PASSWORD: Neema@123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
