@@ -3,6 +3,8 @@ import sys
 from dotenv import load_dotenv
 import os
 from datetime import timedelta
+import socket
+from urllib.parse import urlparse
 import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,7 +15,15 @@ load_dotenv(BASE_DIR / '.env')
 # ============ SECURITY SETTINGS ============
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-qbd8b0)_yxn$2p7d0^$1q*=^kr#-f5kx_e@0@_9g*x9fez)h5')
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+# `RENDER_EXTERNAL_HOSTNAME` when present.
+raw_allowed = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1')
+if raw_allowed.strip() == '*':
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = [h.strip() for h in raw_allowed.split(',') if h.strip()]
+    render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+    if render_host and render_host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(render_host)
 
 # ============ SSL/SECURITY HEADERS ============
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -79,11 +89,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kanbanproject.wsgi.application'
 
-# ============ DATABASE (Production Ready) ============
-# If a DATABASE_URL is provided, prefer it. But when developing locally
-# the managed DB host (for example Render's host) may not be resolvable
-# from the developer machine. In that case fall back to a local sqlite3
-# so `manage.py migrate` and `runserver` work without external network.
+
+# database
 db_url = os.environ.get('DATABASE_URL')
 use_sqlite = False
 if db_url:
