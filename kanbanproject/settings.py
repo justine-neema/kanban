@@ -3,16 +3,19 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 from datetime import timedelta
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load environment variables from a .env file at the project root
-# (keeps credentials out of source code in real deployments)
+# Useful for local development.
 load_dotenv(BASE_DIR / '.env')
 
-SECRET_KEY = 'django-insecure-qbd8b0)_yxn$2p7d0^$1q*=^kr#-f5kx_e@0@_9g*x9fez)h5'
-DEBUG = False
-ALLOWED_HOSTS = ['*']
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-qbd8b0)_yxn$2p7d0^$1q*=^kr#-f5kx_e@0@_9g*x9fez)h5')
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -34,6 +37,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -65,17 +69,11 @@ WSGI_APPLICATION = 'kanbanproject.wsgi.application'
 # Database settings are kept simple here; for deployment prefer to read
 # these values from environment variables or a secrets manager.
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'kanban',
-        'USER': 'kanban_user',
-        'PASSWORD': 'Neema@123',
-        'HOST': 'localhost',
-        'PORT': '5432',
-        'OPTIONS': {
-            'client_encoding': 'UTF8',
-        },
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL', 'postgres://kanban_user:Neema@123@localhost:5432/kanban'),
+        conn_max_age=600,
+        ssl_require=os.environ.get('DATABASE_SSL', 'False').lower() == 'true',
+    )
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -93,6 +91,8 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # JWT authentication settings
