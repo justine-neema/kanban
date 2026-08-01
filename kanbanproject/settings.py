@@ -80,26 +80,37 @@ TEMPLATES = [
 WSGI_APPLICATION = 'kanbanproject.wsgi.application'
 
 # ============ DATABASE (Production Ready) ============
-# Use DATABASE_URL environment variable or fallback to PostgreSQL
-if os.environ.get('DATABASE_URL'):
+# If a DATABASE_URL is provided, prefer it. But when developing locally
+# the managed DB host (for example Render's host) may not be resolvable
+# from the developer machine. In that case fall back to a local sqlite3
+# so `manage.py migrate` and `runserver` work without external network.
+db_url = os.environ.get('DATABASE_URL')
+use_sqlite = False
+if db_url:
+    try:
+        parsed = urlparse(db_url)
+        host = parsed.hostname
+        if host:
+            socket.gethostbyname(host)
+    except Exception:
+        # Host couldn't be resolved from this machine — use sqlite for dev
+        print('WARNING: database host not resolvable locally; falling back to sqlite for development')
+        use_sqlite = True
+
+if use_sqlite or not db_url:
     DATABASES = {
-        'default': dj_database_url.config(
-            default=os.environ.get('DATABASE_URL'),
-            conn_max_age=600,
-            ssl_require=True
-        )
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
 else:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('DB_NAME', 'kanban'),
-            'USER': os.environ.get('DB_USER', 'kanban_user'),
-            'PASSWORD': os.environ.get('DB_PASSWORD', 'Neema@123'),
-            'HOST': os.environ.get('DB_HOST', 'localhost'),
-            'PORT': int(os.environ.get('DB_PORT', 5432)),
-            'CONN_MAX_AGE': 600,
-        }
+        'default': dj_database_url.config(
+            default=db_url,
+            conn_max_age=600,
+            ssl_require=os.environ.get('DATABASE_SSL', 'True').lower() == 'true'
+        )
     }
 
 # ============ AUTHENTICATION ============
