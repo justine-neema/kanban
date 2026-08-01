@@ -2,6 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import *
 
+# Router for REST API endpoints. Each ViewSet registers its routes here
 router = DefaultRouter()
 
 # All ViewSets now have queryset attribute, so no basename needed

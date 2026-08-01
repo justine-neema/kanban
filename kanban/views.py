@@ -34,9 +34,11 @@ def create_default_columns(board):
         )
 
 
-# ========== AUTHENTICATION VIEWS ==========
+# API view classes: each ViewSet groups related endpoints (auth, workspaces,
+# boards, columns, tasks, comments, activities, dashboard).
 
 class AuthViewSet(viewsets.GenericViewSet):
+    # Handles registration, login, logout and token refresh
     permission_classes = [AllowAny]
 
     def _auth_response(self, user):
@@ -94,9 +96,9 @@ class AuthViewSet(viewsets.GenericViewSet):
             return Response({'error': str(e)}, status=400)
 
 
-# ========== USER VIEWS ==========
-
+# User views
 class UserViewSet(viewsets.GenericViewSet):
+    # Endpoints for the authenticated user's profile and password
     permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['get', 'patch'])
@@ -126,9 +128,9 @@ class UserViewSet(viewsets.GenericViewSet):
         return Response(serializer.errors, status=400)
 
 
-# ========== WORKSPACE VIEWS ==========
-
+# Workspace views
 class WorkspaceViewSet(viewsets.ModelViewSet):
+    # Manage workspaces: owner-only operations are guarded by permissions
     queryset = Workspace.objects.all()  # Added this
     serializer_class = WorkspaceSerializer
     permission_classes = [IsAuthenticated, IsWorkspaceOwnerOrMember]
@@ -212,10 +214,10 @@ class WorkspaceViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-# ========== BOARD VIEWS ==========
-
+# Board views
 class BoardViewSet(viewsets.ModelViewSet):
-    queryset = Board.objects.all()  # Added this
+    # Boards live inside workspaces and can be archived/unarchived
+    queryset = Board.objects.all()  
     serializer_class = BoardSerializer
     permission_classes = [IsAuthenticated, IsWorkspaceOwnerOrMember]
 
@@ -262,10 +264,10 @@ class BoardViewSet(viewsets.ModelViewSet):
         return Response({'message': 'Board unarchived successfully'})
 
 
-# ========== COLUMN VIEWS ==========
-
+# Column views
 class ColumnViewSet(viewsets.ModelViewSet):
-    queryset = Column.objects.all()  # Added this
+    # Columns are ordered lanes within a board
+    queryset = Column.objects.all()  
     serializer_class = ColumnSerializer
     permission_classes = [IsAuthenticated, IsWorkspaceOwnerOrMember]
 
@@ -296,9 +298,9 @@ class ColumnViewSet(viewsets.ModelViewSet):
         return Response(ColumnSerializer(column).data)
 
 
-# ========== TASK VIEWS ==========
-
+# Task views
 class TaskViewSet(viewsets.ModelViewSet):
+    # Tasks support moving, bulk moves, assignment, completion, and search
     queryset = Task.objects.all()  # Added this
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated, IsWorkspaceOwnerOrMember]
@@ -521,10 +523,10 @@ class TaskViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-# ========== TASK COMMENT VIEWS ==========
-
+# Task comment views
 class TaskCommentViewSet(viewsets.ModelViewSet):
-    queryset = TaskComment.objects.all()  # Added this
+    # Comments on tasks; admins can remove offensive comments
+    queryset = TaskComment.objects.all()  
     serializer_class = TaskCommentSerializer
     permission_classes = [IsAuthenticated, IsCommentOwnerOrAdmin]
 
@@ -573,7 +575,8 @@ class TaskCommentViewSet(viewsets.ModelViewSet):
 # ========== ACTIVITY LOG VIEWS ==========
 
 class ActivityLogViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = ActivityLog.objects.all()  # Added this
+    # Read-only access to activity logs for user's workspaces
+    queryset = ActivityLog.objects.all()  
     serializer_class = ActivityLogSerializer
     permission_classes = [IsAuthenticated, IsWorkspaceOwnerOrMember]
 
@@ -602,9 +605,10 @@ class ActivityLogViewSet(viewsets.ReadOnlyModelViewSet):
         return qs
 
 
-# ========== DASHBOARD VIEWS ==========
+# Dashboard view
 
 class DashboardViewSet(viewsets.GenericViewSet):
+    # Dashboard endpoints for statistics and simple analytics
     permission_classes = [IsAuthenticated, IsWorkspaceOwnerOrMember]
 
     def _user_workspaces(self, request):

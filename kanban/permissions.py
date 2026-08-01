@@ -3,7 +3,9 @@ from .models import WorkspaceMember, ActivityLog
 
 
 def get_workspace(obj):
-    """Resolve the Workspace associated with a given model instance."""
+    """Resolve the Workspace associated with a given model instance.
+    Returns None when it can't be determined.
+    """
     if obj is None:
         return None
     
@@ -23,7 +25,9 @@ def get_workspace(obj):
 
 
 def is_workspace_member(user, workspace):
-    """Check if user is workspace owner or explicit member."""
+    """Check if user is workspace owner or explicit member.
+    Also requires an authenticated user.
+    """
     if workspace is None or user is None or not user.is_authenticated:
         return False
     return (user == workspace.owner or
@@ -38,7 +42,9 @@ def is_workspace_owner(user, workspace):
 
 
 def is_workspace_admin(user, workspace):
-    """Check if user is workspace owner or has admin role."""
+    """Check if user is workspace owner or has admin role.
+    Admin role is represented in the WorkspaceMember table.
+    """
     if workspace is None or user is None or not user.is_authenticated:
         return False
     if user == workspace.owner:

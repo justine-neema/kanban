@@ -5,15 +5,17 @@ from .models import *
 from .permissions import is_workspace_member
 
 
-# ========== AUTHENTICATION SERIALIZERS ==========
+# Auth and main app objects
 
 class UserSerializer(serializers.ModelSerializer):
+    # Basic public-facing user data
     class Meta:
         model = User
         fields = ['id', 'email', 'username', 'first_name', 'last_name', 'bio', 'avatar']
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    # Serializer for a user's own profile (read/write only)
     class Meta:
         model = User
         fields = ['id', 'email', 'username', 'first_name', 'last_name', 'bio', 'avatar']
@@ -21,6 +23,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    # Handles user registration and password confirmation
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
     
@@ -40,6 +43,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
+    # Simple email/password login that returns a user on success
     email = serializers.EmailField(required=True)
     password = serializers.CharField(write_only=True, required=True)
     
@@ -62,6 +66,7 @@ class LoginSerializer(serializers.Serializer):
 
 
 class ChangePasswordSerializer(serializers.Serializer):
+    # Change password endpoint validation
     old_password = serializers.CharField(write_only=True, required=True)
     new_password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     
@@ -72,9 +77,10 @@ class ChangePasswordSerializer(serializers.Serializer):
         return value
 
 
-# ========== MAIN SERIALIZERS ==========
+# Workspace validation
 
 class WorkspaceMemberSerializer(serializers.ModelSerializer):
+    # Represents a user's membership info inside a workspace
     user = UserSerializer(read_only=True)
     
     class Meta:
@@ -84,6 +90,7 @@ class WorkspaceMemberSerializer(serializers.ModelSerializer):
 
 
 class WorkspaceSerializer(serializers.ModelSerializer):
+    # Workspace with member list and a small computed member_count
     members = WorkspaceMemberSerializer(source='workspacemember_set', many=True, read_only=True)
     member_count = serializers.SerializerMethodField()
     
@@ -97,6 +104,7 @@ class WorkspaceSerializer(serializers.ModelSerializer):
 
 
 class BoardSerializer(serializers.ModelSerializer):
+    # Board serializer ensures workspace belongs to requester on create
     class Meta:
         model = Board
         fields = ['id', 'workspace', 'title', 'description', 'is_archived', 'created_by', 'created_at', 'updated_at']
@@ -111,6 +119,7 @@ class BoardSerializer(serializers.ModelSerializer):
 
 
 class ColumnSerializer(serializers.ModelSerializer):
+    # Column serializer includes a task_count helper for UI
     task_count = serializers.SerializerMethodField()
     
     class Meta:
@@ -130,6 +139,7 @@ class ColumnSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
+    # Task serializer exposes some helpful email fields and count
     created_by_email = serializers.SerializerMethodField()
     assigned_to_email = serializers.SerializerMethodField()
     comment_count = serializers.SerializerMethodField()
@@ -167,6 +177,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
 
 class TaskCommentSerializer(serializers.ModelSerializer):
+    # Comments carry their author and are checked against workspace membership
     user = UserSerializer(read_only=True)
     user_email = serializers.SerializerMethodField()
     
@@ -188,6 +199,7 @@ class TaskCommentSerializer(serializers.ModelSerializer):
 
 
 class ActivityLogSerializer(serializers.ModelSerializer):
+    # Lightweight activity serializer used for feeds and dashboard
     user = UserSerializer(read_only=True)
     user_email = serializers.SerializerMethodField()
     task_title = serializers.SerializerMethodField()

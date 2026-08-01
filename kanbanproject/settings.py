@@ -6,10 +6,12 @@ from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load environment variables from a .env file at the project root
+# (keeps credentials out of source code in real deployments)
 load_dotenv(BASE_DIR / '.env')
 
 SECRET_KEY = 'django-insecure-qbd8b0)_yxn$2p7d0^$1q*=^kr#-f5kx_e@0@_9g*x9fez)h5'
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
@@ -60,7 +62,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kanbanproject.wsgi.application'
 
-# ============ POSTGRESQL DATABASE ============
+# Database settings are kept simple here; for deployment prefer to read
+# these values from environment variables or a secrets manager.
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -92,7 +95,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ============ JWT AUTHENTICATION SETTINGS ============
+# JWT authentication settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',

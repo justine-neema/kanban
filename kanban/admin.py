@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import *
 
+# Simple admin registrations so admin can manage data via Django admin UI
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ['email', 'username', 'first_name', 'last_name', 'is_active']
