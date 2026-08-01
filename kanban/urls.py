@@ -1,6 +1,6 @@
 from django.urls import path, include
-from django.views.generic import RedirectView
 from rest_framework.routers import DefaultRouter
+from .health import health_check
 from .views import *
 
 # Router for REST API endpoints. Each ViewSet registers its routes here
@@ -18,6 +18,7 @@ router.register(r'activities', ActivityLogViewSet)
 router.register(r'dashboard', DashboardViewSet, basename='dashboard')
 
 urlpatterns = [
-    path('', RedirectView.as_view(url='/api/', permanent=False), name='api-root-redirect'),
+    path('', health_check, name='health'),
+    path('health/', health_check, name='health-check'),
     path('api/', include(router.urls)),
 ]

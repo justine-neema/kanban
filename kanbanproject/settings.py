@@ -24,6 +24,8 @@ else:
     render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
     if render_host and render_host not in ALLOWED_HOSTS:
         ALLOWED_HOSTS.append(render_host)
+    if '.onrender.com' not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append('.onrender.com')
 
 # ============ SSL/SECURITY HEADERS ============
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -35,7 +37,13 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
 SECURE_HSTS_PRELOAD = not DEBUG
-CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'https://*.onrender.com').split(',')
+_csrf_origins = os.environ.get('CSRF_TRUSTED_ORIGINS', '')
+CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf_origins.split(',') if o.strip()]
+_render_origin = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if _render_origin:
+    _origin = f'https://{_render_origin}'
+    if _origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(_origin)
 
 # ============ INSTALLED APPS ============
 INSTALLED_APPS = [
@@ -209,17 +217,17 @@ LOGGING = {
         },
     },
     'root': {
-        'handlers': ['console', 'file'],
+        'handlers': ['console'] if not DEBUG else ['console', 'file'],
         'level': 'INFO',
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console'] if not DEBUG else ['console', 'file'],
             'level': 'INFO',
             'propagate': True,
         },
         'kanban': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console'] if not DEBUG else ['console', 'file'],
             'level': 'DEBUG' if DEBUG else 'INFO',
             'propagate': True,
         },
