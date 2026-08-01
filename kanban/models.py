@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils import timezone
 
+# The Kanban with core data models for the following objects: users, workspaces, boards,
+# columns, tasks, comments and activity logs.
 
 class UserManager(BaseUserManager):
     """Custom user manager for email authentication"""
@@ -23,6 +25,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
+    # Custom user with email as the unique identifier for each user
     email = models.EmailField(unique=True, db_index=True)
     username = models.CharField(max_length=150, unique=True)
     first_name = models.CharField(max_length=150, blank=True)
@@ -43,10 +46,12 @@ class User(AbstractUser):
         ordering = ['-created_at']
     
     def __str__(self):
+        # Use email as a readable representation in admin and logs
         return self.email
 
 
 class Workspace(models.Model):
+    # A workspace groups related boards and members
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owned_workspaces')
@@ -68,6 +73,7 @@ class WorkspaceMember(models.Model):
         ('admin', 'Admin'),
     ]
     
+    # Membership link with a role (member/admin)
     workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='member')
@@ -83,6 +89,7 @@ class WorkspaceMember(models.Model):
 
 
 class Board(models.Model):
+    # Board within a workspace, containing multiple columns
     workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE, related_name='boards')
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
@@ -100,6 +107,7 @@ class Board(models.Model):
 
 
 class Column(models.Model):
+    # Columns represent kanban lanes: To Do / In Progress / Done
     board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name='columns')
     title = models.CharField(max_length=50)
     position = models.IntegerField(default=0)
@@ -122,6 +130,7 @@ class Task(models.Model):
         ('urgent', 'Urgent'),
     ]
     
+    # Task belongs to a column; can be assigned and tracked
     column = models.ForeignKey(Column, on_delete=models.CASCADE, related_name='tasks')
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
