@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken,AccessToken
 from django.db.models import Count, Q
 from django.utils import timezone
 from .models import *
@@ -70,11 +70,11 @@ class AuthViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
     def logout(self, request):
         """Logout user by blacklisting refresh token"""
-        refresh_token = request.data.get('refresh')
-        if not refresh_token:
-            return Response({'error': 'Refresh token required'}, status=400)
+        access_token = request.data.get('access')
+        if not access_token:
+            return Response({'error': 'access token required'}, status=400)
         try:
-            token = RefreshToken(refresh_token)
+            token = AccessToken(access_token)
             token.blacklist()
             return Response({'message': 'Logged out successfully'})
         except Exception as e:
@@ -83,9 +83,9 @@ class AuthViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
     def refresh(self, request):
         """Refresh access token"""
-        refresh_token = request.data.get('refresh')
+        refresh_token = request.data.get('access')
         if not refresh_token:
-            return Response({'error': 'Refresh token required'}, status=400)
+            return Response({'error': 'access token required'}, status=400)
         try:
             refresh = RefreshToken(refresh_token)
             return Response({
