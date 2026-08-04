@@ -1,9 +1,9 @@
-#!/bin/sh
-set -e
+#!/bin/bash
 
-python manage.py migrate --noinput
-python manage.py collectstatic --noinput
+echo "Starting application..."
 
-exec gunicorn kanbanproject.wsgi:application \
-  --bind "0.0.0.0:${PORT:-8000}" \
-  --workers "${WEB_CONCURRENCY:-3}"
+# Run migrations after build
+python manage.py migrate
+
+# Start Gunicorn
+gunicorn --workers=4 --bind=0.0.0.0:8000 kanbanproject.wsgi:application
