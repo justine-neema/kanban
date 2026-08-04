@@ -71,10 +71,11 @@ class AuthViewSet(viewsets.GenericViewSet):
     def logout(self, request):
         """Logout user by blacklisting refresh token"""
         access_token = request.data.get('access')
+        refresh_token = request.data.get('refresh')
         if not access_token:
             return Response({'error': 'access token required'}, status=400)
         try:
-            token = AccessToken(access_token)
+            token = RefreshToken(refresh_token)
             token.blacklist()
             return Response({'message': 'Logged out successfully'})
         except Exception as e:
