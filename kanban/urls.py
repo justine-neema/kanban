@@ -20,5 +20,6 @@ router.register(r'dashboard', DashboardViewSet, basename='dashboard')
 urlpatterns = [
     path('', health_check, name='health'),
     path('health/', health_check, name='health-check'),
+    path('api/auth/', include('dj_rest_auth.urls')),
     path('api/', include(router.urls)),
 ]
