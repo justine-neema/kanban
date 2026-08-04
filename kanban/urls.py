@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .health import health_check
 from .views import *
 
+
 # Router for REST API endpoints. Each ViewSet registers its routes here
 router = DefaultRouter()
 
@@ -20,6 +21,5 @@ router.register(r'dashboard', DashboardViewSet, basename='dashboard')
 urlpatterns = [
     path('', health_check, name='health'),
     path('health/', health_check, name='health-check'),
-    path('api/auth/', include('dj_rest_auth.urls')),
     path('api/', include(router.urls)),
 ]
