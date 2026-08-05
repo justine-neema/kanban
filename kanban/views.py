@@ -303,7 +303,7 @@ class ColumnViewSet(viewsets.ModelViewSet):
 # Task views
 class TaskViewSet(viewsets.ModelViewSet):
     # Tasks support moving, bulk moves, assignment, completion, and search
-    queryset = Task.objects.all()  # Added this
+    queryset = Task.objects.all()  
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated, IsWorkspaceOwnerOrMember]
 
