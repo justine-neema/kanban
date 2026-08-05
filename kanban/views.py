@@ -273,10 +273,11 @@ class ColumnViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsWorkspaceOwnerOrMember]
 
     def get_queryset(self):
+        queryset = Column.objects.all()
         board_id = self.request.query_params.get('board')
         if board_id:
-            return Column.objects.filter(board_id=board_id)
-        return Column.objects.none()
+            queryset = queryset.filter(board_id=board_id)
+        return queryset
 
     def get_permissions(self):
         if self.action in ['destroy']:

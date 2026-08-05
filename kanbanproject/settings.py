@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
+    'djo',
+    'django_extensions',
     
     # Local apps
     'kanban',
@@ -139,7 +141,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'kanban.User'
 
-# ============ INTERNATIONALIZATION ============
+# intermationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
