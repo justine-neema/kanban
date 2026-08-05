@@ -265,7 +265,7 @@ class BoardViewSet(viewsets.ModelViewSet):
         return Response({'message': 'Board unarchived successfully'})
 
 
-# Column views
+# column views
 class ColumnViewSet(viewsets.ModelViewSet):
     # Columns are ordered lanes within a board
     queryset = Column.objects.all()  
